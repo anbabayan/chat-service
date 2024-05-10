@@ -3,6 +3,7 @@ package sia.app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sia.app.model.LoginInfoDTO;
 import sia.app.model.User;
 import sia.app.service.UserService;
 
@@ -25,9 +26,9 @@ public class UserController {
     }
 
     @PostMapping("login")
-    public ResponseEntity<User> loginUser(@RequestParam String login,
-                                          @RequestParam String password) {
-        final User user = userService.loginUser(login, password);
+    @CrossOrigin
+    public ResponseEntity<User> loginUser(@RequestBody LoginInfoDTO loginInfo) {
+        final User user = userService.loginUser(loginInfo.getLogin(), loginInfo.getPassword());
         if (user == null) {
             return ResponseEntity.badRequest().build();
         }
@@ -36,15 +37,17 @@ public class UserController {
 
 
     @PostMapping("/sendRequest")
-    public ResponseEntity<String> sendRequest(@RequestParam String inputText,
+    @CrossOrigin
+    public ResponseEntity<String> sendRequest(@RequestBody String inputText,
                                               @RequestParam Boolean isPremium) {
         if (inputText == null || isPremium == null || inputText.isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        try {
-            return userService.sendRequest(inputText, isPremium);
-        } catch (Exception e) {
-            return ResponseEntity.noContent().build();
-        }
+        return ResponseEntity.ok("output");
+//        try {
+//            return userService.sendRequest(inputText, isPremium);
+//        } catch (Exception e) {
+//            return ResponseEntity.noContent().build();
+//        }
     }
 }

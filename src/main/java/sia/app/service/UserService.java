@@ -17,8 +17,8 @@ import static org.springframework.http.HttpHeaders.CONTENT_TYPE;
 
 @Service
 public class UserService {
-    //private static final URI PREMIUM_URI = new URI("");
-    //private static final URI FREE_URI = "";
+    private static final String PREMIUM_URI = "https://b044-37-252-89-113.ngrok-free.app/generate";
+    private static final String FREE_URI = "https://4cda-46-71-255-102.ngrok-free.app/generate";
 
     private final UserRepository userRepository;
 
@@ -41,11 +41,10 @@ public class UserService {
     }
 
     public ResponseEntity<String> sendRequest(String inputText, Boolean isPremium) throws URISyntaxException, IOException, InterruptedException {
-        // Set up the request headers
-        //URI uri = isPremium ? premiumURI : standardURI;
+        URI uri = isPremium ? new URI(PREMIUM_URI) : new URI(FREE_URI);
 
         java.net.http.HttpRequest httpRequest = java.net.http.HttpRequest.newBuilder()
-                .uri(new URI("https://078d-5-77-254-70.ngrok-free.app/generate"))
+                .uri(uri)
                 .header(CONTENT_TYPE, String.valueOf(MediaType.APPLICATION_JSON))
                 .POST(java.net.http.HttpRequest.BodyPublishers.ofString("{\"text\": \"" + inputText + "\"}"))
                 .build();
@@ -56,5 +55,4 @@ public class UserService {
         } else {
             return ResponseEntity.badRequest().build();
         }
-    }
-}
+    }}
