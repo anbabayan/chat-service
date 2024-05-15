@@ -3,6 +3,7 @@ package sia.app.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import sia.app.model.InputDTO;
 import sia.app.model.LoginInfoDTO;
 import sia.app.model.User;
 import sia.app.service.UserService;
@@ -38,16 +39,15 @@ public class UserController {
 
     @PostMapping("/sendRequest")
     @CrossOrigin
-    public ResponseEntity<String> sendRequest(@RequestBody String inputText,
+    public ResponseEntity<String> sendRequest(@RequestBody InputDTO inputDTO,
                                               @RequestParam Boolean isPremium) {
-        if (inputText == null || isPremium == null || inputText.isEmpty()) {
+        if (inputDTO == null || isPremium == null || inputDTO.getInputText().isEmpty()) {
             return ResponseEntity.badRequest().build();
         }
-        return ResponseEntity.ok("output");
-//        try {
-//            return userService.sendRequest(inputText, isPremium);
-//        } catch (Exception e) {
-//            return ResponseEntity.noContent().build();
-//        }
+        try {
+            return userService.sendRequest(inputDTO.getInputText(), isPremium);
+        } catch (Exception e) {
+            return ResponseEntity.noContent().build();
+        }
     }
 }
